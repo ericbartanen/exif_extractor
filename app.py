@@ -50,5 +50,5 @@ def getGPS(image):
     json_coordinates = json.dumps(coordinates)
     return json_coordinates
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3003)
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=3003)
