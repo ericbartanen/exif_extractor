@@ -1,4 +1,4 @@
-from flask import Flask, Request, request, jsonify, make_response
+from flask import Flask, request
 from PIL import Image, TiffImagePlugin
 from PIL.ExifTags import TAGS, GPSTAGS, IFD
 import json
