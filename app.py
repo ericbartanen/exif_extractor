@@ -5,18 +5,14 @@ import json
 
 app = Flask(__name__)
 
-@app.route('/hello/', methods=['GET', 'POST'])
-def welcome():
-    return "Hello World!"
-
-@app.route('/test/', methods=['GET', 'POST'])
-def test():
+@app.route('/latlng/', methods=['POST'])
+def latlng():
     if request.method == "POST":
         img = request.files['image']
         return getGPS(img)
 
 def getGPS(image):
-    im = Image.open(image)     # Open image
+    im = Image.open(image)              # Open image
     exif = im.getexif()                 # Extract exif data
     gps_ifd = exif.get_ifd(IFD.GPSInfo) # Convert exif GPS codes to GPS titles
     coordinates = []
@@ -27,7 +23,6 @@ def getGPS(image):
     # This code was copied from stackoverflow:
     # https://github.com/python-pillow/Pillow/issues/6199
     ############################################################
-
     def cast(v):
         if isinstance(v, TiffImagePlugin.IFDRational):
             return float(v)
