@@ -2,6 +2,8 @@
 
 This API take an image and returns a JSON object with the Latitude Reference, Latitude Coordinates, Longitude Reference, and Longitude Coordinates. All coordinates are in Decimal, Minute, Second (DMS) format. 
 
+If a photo does not contain GPS data then an empty array will be returned. 
+
 *Note: anything in angle brackets (<>) indicates user input
 
 ## Making the Request   
