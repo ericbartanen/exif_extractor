@@ -3,11 +3,19 @@ from PIL import Image, TiffImagePlugin
 from PIL.ExifTags import TAGS, GPSTAGS, IFD
 import json
 
+ALLOWED_EXTENSTIONS = {'jpg', 'jpeg'} 
+
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 *1024 # limit file uploades to 5MB
 
 @app.route('/latlng/', methods=['POST'])
 def latlng():
     if request.method == "POST":
+        
+        # check for image in request
+        if 'image' not in request.files:
+            return "No image found"
+        
         img = request.files['image']
         return getGPS(img)
 
@@ -15,14 +23,17 @@ def getGPS(image):
     im = Image.open(image)              # Open image
     exif = im.getexif()                 # Extract exif data
     gps_ifd = exif.get_ifd(IFD.GPSInfo) # Convert exif GPS codes to GPS titles
+
+    # gps_ifd returns a dictionary, if it's empty than no lat/lng data is present
+    if not gps_ifd:
+        return "No Latitude or Longitude found."
+
     coordinates = []
 
-    ########################################################
-    # Code citation:
-    # Cast function converts objects that cannot be turned into JSON into objects that can.
-    # This code was copied from stackoverflow:
-    # https://github.com/python-pillow/Pillow/issues/6199
-    ############################################################
+    '''
+    Code citation: https://github.com/python-pillow/Pillow/issues/6199
+    Some GPS codes from exif.get_ifg() cannot be parsed with normal methods so they need to be converted into readable objects.
+    '''
     def cast(v):
         if isinstance(v, TiffImagePlugin.IFDRational):
             return float(v)
@@ -45,5 +56,5 @@ def getGPS(image):
     json_coordinates = json.dumps(coordinates)
     return json_coordinates
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=3003)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3003)

@@ -8,17 +8,17 @@ If a photo does not contain GPS data then an empty array will be returned.
 
 ## Making the Request   
 
-You need to make an HTTP POST request passing the image binary to the API endpoint: https://gps-extractor.onrender.com/latlng/
+You need to make an HTTP POST request passing the image binary to the API endpoint: http://34.19.83.191:3003/latlng
 
-### Curl Example
+### Curl Example (Linux)
 
-curl -k -X POST -F 'image=@\<<i>absolute path to image</i>>' https://gps-extractor.onrender.com/latlng/
+curl -k -X POST -F 'image=@\<<i>absolute path to image</i>>' http://34.19.83.191:3003/latlng
 
 ### Python Request Example
 
 <p>
 import requests <br>
-url = "https://gps-extractor.onrender.com/latlng/" <br>
+url = "http://34.19.83.191:3003/latlng" <br>
 files = {'image': ( <br>
     '<<i>image file</i>>', <br>
     open('<<i>image file</i>>', 'rb'), <br>
