@@ -1,30 +1,39 @@
 from flask import Flask, request
 from PIL import Image, TiffImagePlugin
-from PIL.ExifTags import TAGS, GPSTAGS, IFD
+from PIL.ExifTags import GPSTAGS, IFD, TAGS
 import json
 
-ALLOWED_EXTENSTIONS = {'jpg', 'jpeg'} 
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg' ,'png'}
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 *1024 # limit file uploades to 5MB
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1000 * 1000  # 10MB limit
 
 @app.route('/latlng/', methods=['POST'])
 def latlng():
     if request.method == "POST":
         
-        # check for image in request
+        #check for image in request
         if 'image' not in request.files:
             return "No image found"
-        
+
         img = request.files['image']
-        return getGPS(img)
+
+        # check file type
+        if img.mimetype not in ['image/jpeg', 'image/png']:
+            return "Unsupported image format."
+        print(img.mimetype)
+        try:
+            img.stream.seek(0)
+            return getGPS(img)
+        except Exception as e:
+            return str(e)
 
 def getGPS(image):
     im = Image.open(image)              # Open image
     exif = im.getexif()                 # Extract exif data
     gps_ifd = exif.get_ifd(IFD.GPSInfo) # Convert exif GPS codes to GPS titles
 
-    # gps_ifd returns a dictionary, if it's empty than no lat/lng data is present
+   # gps_ifd returns a dictionary, if it's empty than no lat/lng data is present
     if not gps_ifd:
         return "No Latitude or Longitude found."
 
