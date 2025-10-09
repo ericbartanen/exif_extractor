@@ -10,13 +10,13 @@ You need to make an HTTP POST request passing the image binary to the API endpoi
 
 ### Curl Example (Linux)
 
-curl -k -X POST -F 'image=@\<<i>absolute path to image</i>>' http://<<i>domain</i>/latlng/
+curl -k -X POST -F 'image=@\<<i>absolute path to image</i>>' http://<<i>domain</i>>/latlng/
 
 ### Python Request Example
 
 <p>
 import requests <br>
-url = "http://<<i>domain</i>/latlng/" <br>
+url = "http://<<i>domain</i>>/latlng/" <br>
 files = {'image': ( <br>
     '<<i>image file</i>>', <br>
     open('<<i>image file</i>>', 'rb'), <br>
